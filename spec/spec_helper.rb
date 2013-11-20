@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'bundler/setup'
+require 'byebug'
 
 require 'ruby_valve' 
 

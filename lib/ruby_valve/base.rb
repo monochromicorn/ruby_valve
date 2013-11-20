@@ -2,16 +2,24 @@ require 'ruby_valve/errors'
 
 module RubyValve
   class Base
+    attr_reader :executed_steps
 
     def execute
       # begin
+
       # send(:before_all) if respond_to?(:before_all)
+
       execution_order.each do |_method|
-        send(:before_each)           if respond_to?(:before_each)
-        send(before_method(_method)) if respond_to?(before_method(_method)) && !skip?(before_method(_method))
-        send(_method)                if !skip?(_method)
-        send(after_method(_method))  if respond_to?(after_method(_method))  && !skip?(after_method(_method))
-        send(:after_each)           if respond_to?(:after_each)
+        if !skip?(_method)
+          # send(:before_each)           if respond_to?(:before_each)
+          # send(before_method(_method)) if respond_to?(before_method(_method)) && !skip?(before_method(_method))
+          
+          send(_method)      
+          log_step_execution(_method)
+
+          # send(after_method(_method))  if respond_to?(after_method(_method))  && !skip?(after_method(_method))
+          # send(:after_each)            if respond_to?(:after_each)          
+        end
       end
     #   send(:after_success) if respond_to?(:after_success) && !abort_triggered?
     #   send(:after_abort)    if respond_to?(:after_abort)    && abort_triggered?
@@ -29,11 +37,20 @@ module RubyValve
     #   send(:response)
     end
 
-
-    private 
+     
 
       def response
         @response
+      end
+
+      #=> logging methods
+      def log_step_execution(_method)
+        (@executed_steps ||= []) << _method
+        log_execution(_method)
+      end
+
+      def log_execution(_method)
+        (@executed ||= []) << _method
       end
 
       def abort(message, options = {})
@@ -42,8 +59,13 @@ module RubyValve
         raise(OperationAbortError, abort_message) if options[:raise]
       end
 
+      #=> skip methods
       def skip_all_steps?
         abort_triggered?
+      end
+
+      def skip(*step_names)
+        skip_list += step_names
       end
 
       def abort_triggered?
