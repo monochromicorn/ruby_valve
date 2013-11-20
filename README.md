@@ -1,6 +1,7 @@
 # RubyValve
 
-TODO: Write a gem description
+This gem provide a mechanism for doing easy flow type code pattern. Similar to what's done in 
+the template design pattern.
 
 ## Installation
 
