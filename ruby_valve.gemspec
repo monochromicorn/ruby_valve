@@ -6,10 +6,10 @@ require 'ruby_valve/version'
 Gem::Specification.new do |spec|
   spec.name          = "ruby_valve"
   spec.version       = RubyValve::VERSION
-  spec.authors       = ["Juan Leal"]
-  spec.email         = ["TODO: Write your email address"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.authors       = ["monochromicorn"]
+  spec.email         = ["necrocommit@gmail.com"]
+  spec.description   = %q{This gem provide a mechanism for doing easy flow type code pattern}
+  spec.summary       = %q{Programming execution flow control}
   spec.homepage      = ""
   spec.license       = "MIT"
 
