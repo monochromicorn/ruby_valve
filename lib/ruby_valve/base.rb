@@ -1,13 +1,11 @@
 require 'ruby_valve/errors'
 
 module RubyValve
-
   class Base
-    attr_reader :abort_message
 
-    def run!
-      begin
-      send(:before_all) if respond_to?(:before_all)
+    def execute
+      # begin
+      # send(:before_all) if respond_to?(:before_all)
       execution_order.each do |_method|
         send(:before_each)           if respond_to?(:before_each)
         send(before_method(_method)) if respond_to?(before_method(_method)) && !skip?(before_method(_method))
@@ -15,20 +13,20 @@ module RubyValve
         send(after_method(_method))  if respond_to?(after_method(_method))  && !skip?(after_method(_method))
         send(:after_each)           if respond_to?(:after_each)
       end
-      send(:after_success) if respond_to?(:after_success) && !abort_triggered?
-      send(:after_abort)    if respond_to?(:after_abort)    && abort_triggered?
-      send(:after_all) if respond_to?(:after_all) && !skip?(:after_all)
-    rescue OperationAbortError
-      send(:after_fail)    if respond_to?(:after_fail)    && abort_triggered?    
-      raise e
-    rescue => e
-      if respond_to?(:after_exception)
-        send(:after_exception, e)
-      else
-        raise e
-      end
-    end
-      send(:response)
+    #   send(:after_success) if respond_to?(:after_success) && !abort_triggered?
+    #   send(:after_abort)    if respond_to?(:after_abort)    && abort_triggered?
+    #   send(:after_all) if respond_to?(:after_all) && !skip?(:after_all)
+    # rescue OperationAbortError
+    #   send(:after_fail)    if respond_to?(:after_fail)    && abort_triggered?    
+    #   raise e
+    # rescue => e
+    #   if respond_to?(:after_exception)
+    #     send(:after_exception, e)
+    #   else
+    #     raise e
+    #   end
+    # end
+    #   send(:response)
     end
 
 
@@ -81,5 +79,4 @@ module RubyValve
         :"after_#{_method}"
       end
   end  
-
 end
