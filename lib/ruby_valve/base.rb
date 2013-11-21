@@ -2,45 +2,78 @@ require 'ruby_valve/errors'
 
 module RubyValve
   class Base
-    attr_reader :executed_steps
-
-    def execute
-      # begin
-
-      # send(:before_all) if respond_to?(:before_all)
-
-      execution_order.each do |_method|
-        if !skip?(_method)
-          # send(:before_each)           if respond_to?(:before_each)
-          # send(before_method(_method)) if respond_to?(before_method(_method)) && !skip?(before_method(_method))
-          
-          send(_method)      
-          log_step_execution(_method)
-
-          # send(after_method(_method))  if respond_to?(after_method(_method))  && !skip?(after_method(_method))
-          # send(:after_each)            if respond_to?(:after_each)          
-        end
-      end
-    #   send(:after_success) if respond_to?(:after_success) && !abort_triggered?
-    #   send(:after_abort)    if respond_to?(:after_abort)    && abort_triggered?
-    #   send(:after_all) if respond_to?(:after_all) && !skip?(:after_all)
-    # rescue OperationAbortError
-    #   send(:after_fail)    if respond_to?(:after_fail)    && abort_triggered?    
-    #   raise e
-    # rescue => e
-    #   if respond_to?(:after_exception)
-    #     send(:after_exception, e)
-    #   else
-    #     raise e
-    #   end
-    # end
-    #   send(:response)
+    attr_reader :executed_steps, :executed, :exception
+    
+    def init
+      @skip_list = []
     end
 
-     
+    def execute
+      init
 
-      def response
-        @response
+      if respond_to?(:after_exception)
+        begin
+          execute_methods
+        rescue => e
+          @exception = e
+          send(:after_exception)
+        end
+      else
+        execute_methods
+      end
+
+    end
+
+    def response
+      @response
+    end
+
+    protected 
+
+      def execute_methods
+        # begin
+        @response = {}
+        
+        if respond_to?(:before_all)
+          send(:before_all) 
+          log_execution(:before_all)
+        end
+
+        execution_order.each do |_method|
+          if !self.skip?(_method)
+          
+            if respond_to?(:before_each)
+              send(:before_each)    
+              log_execution(:before_each)           
+            end
+
+            #create method to store step results
+            self.class.class_eval {attr_accessor :"#{_method}_result"}
+            result = send(_method)
+
+            #assign step result information
+            @response[:"#{_method}_result"] = result
+            send(:"#{_method}_result=", result) 
+
+            #log step exec
+            log_step_execution(_method)
+
+            if respond_to?(:after_each)    
+              send(:after_each)        
+              log_execution(:after_each)
+            end
+          end
+        end
+
+        if respond_to?(:after_success) && !abort_triggered?
+          send(:after_success) 
+          log_execution(:after_success)
+        end
+
+        if respond_to?(:after_abort) && abort_triggered?
+          send(:after_abort)  
+          log_execution(:after_abort)
+        end        
       end
 
       #=> logging methods
@@ -56,7 +89,7 @@ module RubyValve
       def abort(message, options = {})
         @abort_triggered = true
         @abort_message = message 
-        raise(OperationAbortError, abort_message) if options[:raise]
+        raise(AbortError, @abort_message) if options[:raise]
       end
 
       #=> skip methods
@@ -65,7 +98,11 @@ module RubyValve
       end
 
       def skip(*step_names)
-        skip_list += step_names
+        skip_list.push *step_names
+      end
+
+      def skip_list
+        @skip_list
       end
 
       def abort_triggered?
@@ -77,11 +114,7 @@ module RubyValve
 
         skip_list.include?(method_name)
       end
-
-      def skip_list
-        @skip_list ||= []
-      end
-
+    
       def execution_order
         step_methods = methods.select {|meth| meth.to_s.match(/^step_[0-9]*$/)}
 
@@ -93,12 +126,5 @@ module RubyValve
         end
       end
 
-      def before_method(_method)
-        :"before_#{_method}"
-      end
-
-      def after_method(_method)
-        :"after_#{_method}"
-      end
   end  
 end
