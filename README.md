@@ -325,7 +325,7 @@ This will display each step and callback method that was executed.
     
     foo = Foo.new
     foo.execute
-    foo.executed_steps
+    foo.executed
     
     [:step_1, :after_each, :step_2, :after_each]
     
