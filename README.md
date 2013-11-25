@@ -28,8 +28,8 @@ To use RubyValve you need to subclass the base class:
     class Foo < RubyValve::Base
     end
     
-###step_n methods
-Next you define a number steps using the naming convention of step_n for the method name.
+###\#step_n methods
+Next you define a number steps using the naming convention of #step_n for the method name.
 
     class Foo < RubyValve::Base
     
@@ -42,15 +42,15 @@ Next you define a number steps using the naming convention of step_n for the met
       end 
     end
 
-After defining step_n methods you can execute then all by running the #execute method.
+After defining #step_n methods you can execute then all by running the #execute method.
 
     Foo.new.execute
     
     A
     B
 
-###skip
-You can skip a step by using the skip method
+###\#skip
+You can skip a step by using the #skip method
 
     def step_1
       puts "A"
@@ -75,7 +75,7 @@ You can skip a step by using the skip method
     A
     D
     
-###abort
+###\#abort
 You can have it abort at a certain step and it will not execute the remainder of the steps.
 
     def step_1
@@ -99,7 +99,7 @@ You can have it abort at a certain step and it will not execute the remainder of
     
     A
     
-You can also have abort raise an error as well.
+You can also have #abort raise an error as well.
 
     def step_1
       puts "A"
@@ -124,8 +124,8 @@ You can also have abort raise an error as well.
     RubyValve::AbortError: 
       Ug
       
-####step_n_result
-The result of each step_n method can be accessed by calling step_n_result. This allows the sharing of data between methods.
+####\#step_n_result
+The result of each #step_n method can be accessed by calling #step_n_result. This allows the sharing of data between methods.
 
     def step_1
       "A"
@@ -140,7 +140,7 @@ The result of each step_n method can be accessed by calling step_n_result. This 
     step 1's result was: A
     
     
-####response
+####\#response
 The response for each step is recorded in a hash that can be accessed by this method
 
       def step_1
@@ -161,7 +161,7 @@ The response for each step is recorded in a hash that can be accessed by this me
 ###Callbacks
 RubyValve provides a number of callbacks.
 
-####before_all
+####\#before_all
 
 Executes code once before all the steps.
 
@@ -183,7 +183,7 @@ Executes code once before all the steps.
     A
     B
 
-####before_each
+####\#before_each
 Executes code before each step method
 
     def before_each
@@ -205,7 +205,7 @@ Executes code before each step method
     ..BE
     B
 
-####after_each
+####\#after_each
 Executes code after each step method.
 
     def after_each
@@ -227,7 +227,7 @@ Executes code after each step method.
     B
     ..AE    
     
-####after_success
+####\#after_success
 Executes if no abort was triggered or exceptions raised.
 
     def step_1
@@ -244,8 +244,8 @@ Executes if no abort was triggered or exceptions raised.
     E
     Yay!
     
-####after_abort
-Executes if an abort, with a raise, was triggered.
+####\#after_abort
+Executes if an abort, without a raise, was triggered.
 
     def step_1
       abort "call it off"
@@ -263,7 +263,7 @@ Executes if an abort, with a raise, was triggered.
     
     aborted!  
 
-####after_raise and exeception
+####\#after_raise and #exeception
 Creating an after_raise method will trigger an automatic rescue when an error is raised. The exception is stored in the **exception** method.
 
     def step_1
@@ -285,9 +285,9 @@ Creating an after_raise method will trigger an automatic rescue when an error is
 ###execution logs
 There are a couple of methods that can be used to look at what was executed.
 
-####executed_steps
+####\#executed_steps
 
-This will display each step_n method that was actually executed.
+This will display each #step_n method that was actually executed.
 
     def step_1
       "A"
@@ -307,7 +307,7 @@ This will display each step_n method that was actually executed.
     
     [:step_1, :step_2]
     
-####executed
+####\#executed
 This will display each step and callback method that was executed.
 
     def step_1
@@ -330,7 +330,7 @@ This will display each step and callback method that was executed.
     
 ##Suggestions
 
-I would recommend encapsulating the logic of what is to be done into methods with names that clearly state the intention of the code.
+I would recommend encapsulating the logic of what is to be done into methods with names that clearly state the intention of the code. The calling these methods within the steps.
 
 ####Example
 
