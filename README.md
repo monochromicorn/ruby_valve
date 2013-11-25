@@ -23,6 +23,8 @@ Or install it yourself as:
 
 To use RubyValve you need to subclass the base class:
 
+    require 'ruby_valve'
+
     class Foo < RubyValve::Base
     end
     
