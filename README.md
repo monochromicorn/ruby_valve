@@ -28,7 +28,8 @@ To use RubyValve you need to subclass the base class:
     class Foo < RubyValve::Base
     end
     
-###\#step_n methods
+    
+####\#step_n methods
 Next you define a number steps using the naming convention of #step_n for the method name.
 
     class Foo < RubyValve::Base
@@ -49,7 +50,7 @@ After defining #step_n methods you can execute then all by running the #execute 
     A
     B
 
-###\#skip
+####\#skip
 You can skip a step by using the #skip method
 
     def step_1
@@ -75,7 +76,7 @@ You can skip a step by using the #skip method
     A
     D
     
-###\#abort
+####\#abort
 You can have it abort at a certain step and it will not execute the remainder of the steps.
 
     def step_1
