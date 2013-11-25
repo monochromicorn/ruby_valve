@@ -294,5 +294,49 @@ describe RubyValve::Base do
     end  
   end
 
+  describe "#after_exception" do
+    before(:each) do
 
+      class AfterRaise < RubyValve::Base 
+        define_method(:after_exception) {}
+        define_method(:step_1) {skip :step_2}
+        define_method(:step_2) {}
+        define_method(:step_3) {abort "Ug", :raise => true}
+        define_method(:step_4) {}
+        define_method(:step_5) {}
+
+      end 
+    
+      @after_raise = AfterRaise.new
+    end   
+        
+    it "should not raise AbortError when :raise => true" do
+      expect {@after_raise.execute}.to_not raise_error
+    end    
+
+  end
+
+  describe "#exception" do
+    before(:each) do
+
+      class AfterRaise < RubyValve::Base 
+        define_method(:after_exception) {}
+        define_method(:step_1) {skip :step_2}
+        define_method(:step_2) {}
+        define_method(:step_3) {abort "Ug", :raise => true}
+        define_method(:step_4) {}
+        define_method(:step_5) {}
+
+      end 
+    
+      @after_raise = AfterRaise.new
+    end   
+    
+    it "should contain the raised exception" do
+      @after_raise.execute
+      @after_raise.exception.should be_a_kind_of(RubyValve::AbortError)
+      @after_raise.exception.message.should eql("Ug")
+    end    
+
+  end  
 end

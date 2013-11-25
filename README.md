@@ -264,8 +264,8 @@ Executes if an abort, without a raise, was triggered.
     
     aborted!  
 
-####\#after_raise and #exeception
-Creating an after_raise method will trigger an automatic rescue when an error is raised. The exception is stored in the **exception** method.
+####\#after_exception and #exception
+Creating an after_exception method will trigger an automatic rescue when an error is raised. The exception is stored in the **exception** method.
 
     def step_1
       abort "call it off", raise: true
@@ -275,7 +275,7 @@ Creating an after_raise method will trigger an automatic rescue when an error is
       puts "E"
     end
     
-    def after_raise
+    def after_exception
       puts exception.message
     end
     
