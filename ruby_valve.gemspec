@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["necrocommit@gmail.com"]
   spec.description   = %q{This gem provide a mechanism for doing easy flow type code pattern}
   spec.summary       = %q{Programming execution flow control}
-  spec.homepage      = "http://github.com/monochromicorn/ruby_valve#step_n-methods"
+  spec.homepage      = "http://github.com/monochromicorn/ruby_valve"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
