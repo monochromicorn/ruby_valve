@@ -1,14 +1,10 @@
 require 'spec_helper'
 
-
-
 describe RubyValve::Base do
   describe "#execute" do
     before(:each) do
-
       class DummyValve 
-        include RubyValve::Core 
-        
+        include RubyValve::Core
         define_method(:step_1) {}
         define_method(:step_2) {}
         define_method(:step_3) {}
@@ -35,7 +31,8 @@ describe RubyValve::Base do
   describe "#skip" do
     before(:each) do
 
-      class SkipValve < RubyValve::Base 
+      class SkipValve 
+        include RubyValve::Core 
         define_method(:step_1) {skip :step_2}
         define_method(:step_2) {}
         define_method(:step_3) {skip :step_4, :step_5}
@@ -55,7 +52,9 @@ describe RubyValve::Base do
   describe "#response" do
     before(:each) do
 
-      class Res < RubyValve::Base 
+      class Res  
+        include RubyValve::Core
+
         define_method(:step_1) {"apple"}
         define_method(:step_2) {"banana"}
       end 
@@ -72,7 +71,9 @@ describe RubyValve::Base do
   describe "#step_x_result" do
     before(:each) do
 
-      class Res1 < RubyValve::Base 
+      class Res1 
+        include RubyValve::Core
+
         define_method(:step_1) {"apple"}
         define_method(:step_2) {"banana"}
       end 
@@ -90,7 +91,9 @@ describe RubyValve::Base do
   describe "#abort" do
     before(:each) do
 
-      class AfterAbort < RubyValve::Base 
+      class AfterAbort 
+        include RubyValve::Core
+
         define_method(:after_abort) {}
         define_method(:step_1) {skip :step_2}
         define_method(:step_2) {}
@@ -111,7 +114,9 @@ describe RubyValve::Base do
   describe "#before_each" do
     before(:each) do
 
-      class BeforeEach < RubyValve::Base 
+      class BeforeEach 
+        include RubyValve::Core
+
         define_method(:before_each) {}
         define_method(:step_1) {skip :step_2}
         define_method(:step_2) {}
@@ -143,7 +148,8 @@ describe RubyValve::Base do
   describe "#before_all" do
     before(:each) do
 
-      class BeforeAll < RubyValve::Base 
+      class BeforeAll
+        include RubyValve::Core
         define_method(:before_all) {}
         define_method(:step_1) {skip :step_2}
         define_method(:step_2) {}
@@ -176,7 +182,9 @@ describe RubyValve::Base do
   describe "#after_each" do
     before(:each) do
 
-      class AfterEach < RubyValve::Base 
+      class AfterEach 
+        include RubyValve::Core
+
         define_method(:after_each) {}
         define_method(:step_1) {skip :step_2}
         define_method(:step_2) {}
@@ -208,7 +216,9 @@ describe RubyValve::Base do
   describe "#after_success" do
     before(:each) do
 
-      class AfterSuccess < RubyValve::Base 
+      class AfterSuccess 
+        include RubyValve::Core
+
         define_method(:after_success) {}
         define_method(:step_1) {skip :step_2}
         define_method(:step_2) {}
@@ -264,7 +274,9 @@ describe RubyValve::Base do
     context "after an abort is triggered" do
       before(:each) do
 
-        class AfterAbort < RubyValve::Base 
+        class AfterAbortTest 
+          include RubyValve::Core
+
           define_method(:after_abort) {}
           define_method(:step_1) {skip :step_2}
           define_method(:step_2) {}
@@ -273,7 +285,7 @@ describe RubyValve::Base do
           define_method(:step_5) {}
         end 
       
-        @after_abort = AfterAbort.new
+        @after_abort = AfterAbortTest.new
       end
 
       it "should execute when defined" do
@@ -302,7 +314,9 @@ describe RubyValve::Base do
   describe "#after_exception" do
     before(:each) do
 
-      class AfterRaise < RubyValve::Base 
+      class AfterRaise 
+        include RubyValve::Core
+
         define_method(:after_exception) {}
         define_method(:step_1) {skip :step_2}
         define_method(:step_2) {}
@@ -324,7 +338,9 @@ describe RubyValve::Base do
   describe "#exception" do
     before(:each) do
 
-      class AfterRaise < RubyValve::Base 
+      class ExceptionTest 
+        include RubyValve::Core
+
         define_method(:after_exception) {}
         define_method(:step_1) {skip :step_2}
         define_method(:step_2) {}
@@ -334,7 +350,7 @@ describe RubyValve::Base do
 
       end 
     
-      @after_raise = AfterRaise.new
+      @after_raise = ExceptionTest.new
     end   
     
     it "should contain the raised exception" do

@@ -21,13 +21,21 @@ Or install it yourself as:
 ## Usage
 
 
-To use RubyValve you need to subclass the base class:
+To use RubyValve you can subclass the base class:
 
     require 'ruby_valve'
 
     class Foo < RubyValve::Base
     end
     
+Or, you can include RubyValve::Core
+
+    require 'ruby_valve'
+
+    class Foo 
+      include RubyValve::Core
+      
+    end    
     
 ####\#step_n methods
 Next you define a number steps using the naming convention of #step_n for the method name.
@@ -43,7 +51,7 @@ Next you define a number steps using the naming convention of #step_n for the me
       end 
     end
 
-After defining #step_n methods you can execute then all by running the #execute method.
+After defining #step_n methods you can execute them all by running the #execute method.
 
     Foo.new.execute
     
@@ -359,3 +367,8 @@ I would recommend encapsulating the logic of what is to be done into methods wit
     def post_paypal_transaction
       #code
     end       
+    
+###Tests
+Test are implemented in Rspec and use guard as well.
+
+    ruby_valve > bundle exec rspec spec    
