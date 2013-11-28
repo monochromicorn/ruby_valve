@@ -2,6 +2,10 @@ require 'ruby_valve/errors'
 
 module RubyValve
   module Core
+    def self.included(base)
+      base.send(:extend, ClassMethods)
+    end
+
     attr_reader :executed_steps, :executed, :exception
     
     def init
@@ -123,6 +127,17 @@ module RubyValve
           ordinal_y = y.to_s.split("_").last.to_i
 
           ordinal_x <=> ordinal_y
+        end
+      end
+
+      module ClassMethods
+        def steps(*args)
+          ordinal = 0
+          args.each do |method_name|
+            define_method(:"step_#{ordinal += 1}") do
+              send(method_name)
+            end
+          end
         end
       end
   end  

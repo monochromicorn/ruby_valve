@@ -28,6 +28,35 @@ describe RubyValve::Base do
     end
   end
 
+  describe ".steps" do
+    before(:each) do
+
+      class DummySteps 
+        include RubyValve::Core
+        
+        steps :prep, :running, :teardown
+
+        define_method(:prep) {"A"}
+        define_method(:running) {"B"}
+        define_method(:teardown) {"C"}
+      end
+
+      @steps = DummySteps.new
+    end    
+
+    it "should execute all step methods in order" do
+      @steps.execute
+      @steps.executed_steps.should eql([:step_1, :step_2, :step_3])
+    end    
+
+    it "should have the correct method results" do
+      @steps.execute
+      @steps.response.should eql({:step_1_result=>"A", 
+        :step_2_result=>"B",
+        :step_3_result=>"C"})
+    end       
+  end  
+
   describe "#skip" do
     before(:each) do
 
