@@ -57,6 +57,28 @@ After defining #step_n methods you can execute them all by running the #execute 
     
     A
     B
+    
+####.steps
+An alternative to defining step_n methods is to used the .steps class method to define steps and the steps will execute the methods you provide
+
+    class Foo < RubyValve::Base
+      steps :print_A, :print_B
+    
+      def print_A
+        puts "A"
+      end
+      
+      def print_B
+        puts "B"  
+      end 
+    end
+
+After defining #step_n methods you can execute them all by running the #execute method.
+
+    Foo.new.execute
+    
+    A
+    B     
 
 ####\#skip
 You can skip a step by using the #skip method
